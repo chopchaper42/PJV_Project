@@ -23,9 +23,7 @@ public class ClientTCP
 
     public void sendMessage(String msg) throws IOException
     {
-        out.println(msg);
-        /*String resp = in.readLine();
-        return resp;*/
+        out.println("Client: " + msg);
     }
 
     public void stopConnection() throws IOException
