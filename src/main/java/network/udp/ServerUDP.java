@@ -12,8 +12,8 @@ public class ServerUDP
 
     public ServerUDP() throws SocketException, UnknownHostException
     {
-        InetAddress address = InetAddress.getByName("172.21.7.2");
-        socket = new DatagramSocket(6000, address);
+        InetAddress address = InetAddress.getByName("172.26.112.1");
+        socket = new DatagramSocket(10422, address);
     }
 
     public void start() throws IOException
@@ -32,7 +32,16 @@ public class ServerUDP
             int port = packet.getPort();
 
             System.out.println("Received a packet from: " + address + ":" + port + "\t" + counter);
+            String received = new String(packet.getData(), 0, packet.getLength());
+            System.out.println(received);
 
+            DatagramPacket answer = new DatagramPacket(
+                    buf,
+                    buf.length,
+                    packet.getAddress(),
+                    port
+            );
+            socket.send(answer);
         }
     }
 }
