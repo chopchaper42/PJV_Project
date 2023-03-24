@@ -6,8 +6,9 @@ public class Main
 {
     public static void main(String[] args) throws IOException
     {
-        UDP.send();
-        System.out.println("Done");
+        MyClient.main();
+        /*UDP.send();
+        System.out.println("Done");*/
     }
 
 }
