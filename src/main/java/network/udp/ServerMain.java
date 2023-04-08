@@ -1,9 +1,8 @@
+package network.udp;
+
 import network.udp.ServerUDP;
 
-import java.io.IOException;
-import java.net.SocketException;
-
-public class Main
+public class ServerMain
 {
     public static void main(String[] args)
     {
