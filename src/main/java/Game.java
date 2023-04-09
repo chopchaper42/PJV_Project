@@ -2,7 +2,6 @@ import Engine.Entity;
 import Engine.Level;
 import Engine.Player;
 import Engine.Tiles.Tile;
-import Utility.Pythagoras;
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
@@ -60,6 +59,7 @@ public class Game
         loop.start();
     }
 
+    // TODO: Move this to the player class ???
     public void movePlayer(double dt) {
 
     }

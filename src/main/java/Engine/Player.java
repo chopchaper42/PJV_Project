@@ -42,19 +42,22 @@ public class Player extends Entity
         double distance = getSpeedPerSecond() * dt;
         if (W_pressed && !(D_pressed || A_pressed))
             moveY(-distance);
-        if (W_pressed && D_pressed)
+        // What if the player is holding down multiple keys?
+            // W + D + S + A is a valid input in that case, but the character goes to the upright.
+        else if (W_pressed && D_pressed)
             moveDiagonal(Pythagoras.leg(distance), 1, -1);
-        if (W_pressed && A_pressed)
+        //
+        else if (W_pressed && A_pressed)
             moveDiagonal(Pythagoras.leg(distance), -1, -1);
-        if (A_pressed && !(W_pressed || S_pressed))
+        else if (A_pressed && !(W_pressed || S_pressed))
             moveX(-distance);
-        if (S_pressed && !(D_pressed || A_pressed))
+        else if (S_pressed && !(D_pressed || A_pressed))
             moveY(distance);
-        if (S_pressed && A_pressed)
+        else if (S_pressed && A_pressed)
             moveDiagonal(Pythagoras.leg(distance), -1, 1);
-        if (S_pressed && D_pressed)
+        else if (S_pressed && D_pressed)
             moveDiagonal(Pythagoras.leg(distance), 1, 1);
-        if (D_pressed && !(S_pressed || W_pressed))
+        else if (D_pressed && !(S_pressed || W_pressed))
             moveX(distance);
     }
 }
