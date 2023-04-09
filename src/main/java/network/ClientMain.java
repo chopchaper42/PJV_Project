@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class ClientMain
 {
-    public static final int DEFAULT_PORT = 6000;
+    public static final int DEFAULT_PORT = 10422;
 
     public static void main(String[] args)
     {
