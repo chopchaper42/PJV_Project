@@ -1,10 +1,10 @@
 package network.udp;
 
-import network.udp.ServerUDP;
+import java.net.UnknownHostException;
 
 public class ServerMain
 {
-    public static void main(String[] args)
+    public static void main(String[] args) throws UnknownHostException
     {
         ServerUDP server = null;
         try

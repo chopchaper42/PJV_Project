@@ -10,14 +10,10 @@ import java.util.Scanner;
 
 public class ClientUDP
 {
-    public static final int DEFAULT_PORT = 10421;
-    public static final int TARGET_PORT = 10422;
-    public static final String LOCAL_SERVER_IP = "127.0.0.1";
-    public static final String SERVER_IP = "172.21.7.2";
-    public static final String DANYA_SERVER_IP = "172.21.14.1";
-    public static final String EGOR_SERVER_IP = "172.20.10.4";
-    public static final String GRISHA_SERVER_IP = "172.26.112.1";
-    public static final String STAS_SERVER_IP = "172.21.13.2";
+    public static final int DEFAULT_PORT = 10000;
+//    public static final int TARGET_PORT = 10422;
+    public static final String LOCAL_SERVER_IP = "172.20.10.4";
+    public static final String SERVER_IP = "172.20.10.7";
 
     public static void send() throws IOException
     {
@@ -33,13 +29,14 @@ public class ClientUDP
         DatagramPacket sendingPacket = new DatagramPacket(
                 sendingBuffer,
                 sendingBuffer.length,
-                InetAddress.getByName(STAS_SERVER_IP),
-                TARGET_PORT
+                InetAddress.getByName(SERVER_IP),
+                DEFAULT_PORT
         );
 
-        for (int i = 0; i < 100; i++) {
-            socket.send(sendingPacket);
-        }
+        socket.send(sendingPacket);
+//        for (int i = 0; i < 100; i++) {
+//            socket.send(sendingPacket);
+//        }
 
 
         /*Scanner sc = new Scanner(System.in);
