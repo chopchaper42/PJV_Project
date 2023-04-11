@@ -4,15 +4,22 @@ import javafx.stage.Stage;
 
 public class Window
 {
-    private static final double WIDTH = 1080;
-    private static final double HEIGHT = 720;
-    private static final boolean RESIZABLE = false;
-    private static final String TITLE = "Cave Shooter";
+    private final double width;// = 1080;
+    private final double height;// = 720;
+    private final boolean resizable;// = false;
+    private final String title;// = "Cave Shooter";
 
-    public static void init(Stage stage) {
-        stage.setTitle(TITLE);
-        stage.setWidth(WIDTH);
-        stage.setHeight(HEIGHT);
-        stage.setResizable(RESIZABLE);
+    public Window(String title, double width, double height, boolean resizable) {
+        this.title = title;
+        this.width = width;
+        this.height = height;
+        this.resizable = resizable;
+    }
+
+    public void init(Stage stage) {
+        stage.setTitle(title);
+        stage.setWidth(width);
+        stage.setHeight(height);
+        stage.setResizable(resizable);
     }
 }

@@ -1,5 +1,6 @@
 package Engine;
 
+import Engine.Entity.LivingEntity;
 import Utility.Pythagoras;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
@@ -7,30 +8,20 @@ import javafx.scene.image.Image;
 import java.io.File;
 import java.util.List;
 
-public class Player extends Entity
+public class Player extends LivingEntity
 {
     private final int SPEED_PER_SECOND = 1000;
     private List<Item> inventory;
-    private Image image = new Image(new File("./src/main/assets/player.png").toURI().toString());
-    public Player(Point2D position, int health)
-    {
-        super(position, health);
-    }
+    private final Image image = new Image(new File("./src/main/assets/player.png").toURI().toString());
 
     public Player(Point2D position)
     {
-        this(position, 100);
+        super(position);
     }
 
-    @Override
-    public Image getImage()
+    public Player(double x, double y)
     {
-        return image;
-    }
-
-    public int getSpeedPerSecond()
-    {
-        return SPEED_PER_SECOND;
+        super(x, y);
     }
 
     private void moveDiagonal(double distance, int scaleX, int scaleY) {
@@ -56,5 +47,15 @@ public class Player extends Entity
             moveDiagonal(Pythagoras.leg(distance), 1, 1);
         if (D_pressed && !(S_pressed || W_pressed))
             moveX(distance);
+    }
+
+    public int getSpeedPerSecond()
+    {
+        return SPEED_PER_SECOND;
+    }
+
+    public List<Item> getInventory()
+    {
+        return inventory;
     }
 }
