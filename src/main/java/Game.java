@@ -1,9 +1,9 @@
-import Engine.Entity;
-import Engine.Level;
+import Engine.Entity.Entity;
+import Engine.Graphics;
+import Engine.Level.Level;
 import Engine.Player;
-import Engine.Tiles.Tile;
+import Engine.Tile;
 import javafx.animation.AnimationTimer;
-import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -19,9 +19,8 @@ import java.util.List;
 public class Game
 {
     List<Entity> entities = new ArrayList<>();
-    Point2D defaultPosition;
     private Canvas canvas;
-    private List<Tile> tiles;
+    private List<Tile> tiles; //Better to store tiles in the Level class
     private Player player;
     private Stage stage;
     private boolean W_pressed = false;
@@ -33,12 +32,11 @@ public class Game
     public Game(Stage stage) {
         this.canvas = new Canvas();
         tiles = new Level(
-                new File("./src/main/levels/level1.txt"),
-                canvas
+                new File("./src/main/levels/level1.txt")
         ).getTiles();
-        defaultPosition = tiles.get(0).getPosition();
         this.stage = stage;
     }
+
 
     public void run() {
         startGame();
@@ -58,14 +56,9 @@ public class Game
         };
         loop.start();
     }
-
-    // TODO: Move this to the player class ???
-    public void movePlayer(double dt) {
-
-    }
     private void redrawTiles() {
         tiles.forEach(tile -> {
-            getGraphicsContext().drawImage(tile.getImage(),
+            Graphics.getGraphics().drawImage(tile.getImage(), // Duplicate of lines below
                     tile.getX(),
                     tile.getY());
         });
@@ -73,7 +66,7 @@ public class Game
     private void redrawEntities() {
         entities.forEach(entity ->
         {
-            getGraphicsContext().drawImage(entity.getImage(),
+            Graphics.getGraphics().drawImage(entity.getImage(),
                     entity.getX(),
                     entity.getY());
         });
@@ -81,13 +74,9 @@ public class Game
 
     private void spawnPlayer()
     {
-        Player player = new Player(defaultPosition, 100);
+        Player player = new Player(Level.getFirstTile());
         entities.add(player);
         this.player = player;
-    }
-
-    public GraphicsContext getGraphicsContext() {
-        return canvas.getGraphicsContext2D();
     }
 
     private void startGame() {

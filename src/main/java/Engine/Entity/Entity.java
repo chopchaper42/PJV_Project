@@ -1,6 +1,7 @@
-package Engine;
+package Engine.Entity;
 
 import javafx.geometry.Point2D;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
 public abstract class Entity
@@ -8,22 +9,15 @@ public abstract class Entity
     private Image image;
     private double x;
     private double y;
-    private int health = 100;
-    private double speed;
-    private Point2D direction;
 
-    public Entity(Point2D position, int health) {
+    public Entity(Point2D position) {
         this.x = position.getX();
         this.y = position.getY();
-        this.health = health;
-    }
-    public Entity(Point2D position) {
-        this(position, 100);
     }
 
-    public int getHealth()
-    {
-        return health;
+    public Entity(double x, double y) {
+        this.x = x;
+        this.y = y;
     }
 
     public double getX() {
@@ -32,6 +26,10 @@ public abstract class Entity
 
     public double getY() {
         return y;
+    }
+
+    public Point2D getPosition() {
+        return new Point2D(x, y);
     }
 
     public Image getImage()
@@ -45,5 +43,10 @@ public abstract class Entity
 
     void moveY(double y) {
         this.y += y;
+    }
+
+    public void draw(GraphicsContext graphics)
+    {
+        graphics.drawImage(image, getX(), getY());
     }
 }
