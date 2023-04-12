@@ -42,7 +42,7 @@ public class ServerUDP
         System.out.println(socket.getLocalAddress());
 
         DatagramPacket receivePacket = new DatagramPacket(receiveBuffer,
-                receiveBuffer.length);
+                receiveBuffer.length);network.udp
 
         System.out.println("Port: " + socket.getLocalPort());
 

@@ -8,7 +8,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 
-public class ClientUDP
+public class
+ClientUDP
 {
     public static final int DEFAULT_PORT = 10000;
 //    public static final int TARGET_PORT = 10422;
