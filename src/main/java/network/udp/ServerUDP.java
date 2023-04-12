@@ -2,80 +2,109 @@ package network.udp;
 
 import java.io.IOException;
 import java.net.*;
-import java.util.Scanner;
+import java.util.*;
 
 public class ServerUDP
 {
-    private  InetAddress IP_ADDRESS;
+    private DatagramSocket socket;
+    private boolean running;
 
-    {
-        try
-        {
-            IP_ADDRESS = InetAddress.getLocalHost();
-        }
-        catch (UnknownHostException e)
-        {
-            throw new RuntimeException(e);
-        }
-    }
-
+    private String[] ipList = new String[2];
+    private final byte[] receiveBuffer = new byte[256];
+    private final byte[] sendBuffer = new byte[256];
+    private final InetAddress IP_ADDRESS = InetAddress.getLocalHost();
     private int port;
     private int players;
 
-    private DatagramSocket socket;
-    private boolean running;
-    private final byte[] receiveBuffer = new byte[256];
-    private final byte[] sendBuffer = new byte[256];
-
-
+    public ServerUDP() throws UnknownHostException
+    {
+        ipList[0] = null;
+        ipList[1] = null;
+    }
 
     public void start() throws IOException
     {
-        if (!ConfigureServer())
-            return;
+        configureTheServer();
 
+        InetAddress serverAddress = IP_ADDRESS;
         socket = new DatagramSocket(port, IP_ADDRESS);
 
         System.out.printf("Listening on udp:%s:%d%n",
                 IP_ADDRESS.getHostAddress(), port);
-        System.out.println("----------------------------------\n");
         System.out.println(socket.getLocalAddress());
 
         DatagramPacket receivePacket = new DatagramPacket(receiveBuffer,
-                receiveBuffer.length);network.udp
+                receiveBuffer.length);
 
-        System.out.println("Port: " + socket.getLocalPort());
 
-        System.out.println("Waiting for a client...");
+        while (players > 0) {
 
-        while (true) {
             socket.receive(receivePacket);
-            String receivedMessage = new String(receivePacket.getData(), 0,
-                    receivePacket.getLength());
-            System.out.println("RECEIVED "  + ": " + receivedMessage);
+
+
+            String ip = extractIP(receivePacket);
+
+            if (checkIP(ip))
+            {
+                System.out.println("Another dead fellow has been found.. HA-HA-HA!");
+                System.out.println("His ip is: " + ip);
+                players--;
+                ipList[players] = ip;Scanner in = new Scanner(System.in);
+            }
         }
+
+        System.out.println("The game is starting...");
+
+
+    }
+
+    private String extractIP(DatagramPacket receivePacket)
+    {
+        String ip = receivePacket.getAddress().toString();
+        ip = ip.substring(1);
+        return ip;
+    }
+
+    public void configureTheServer()
+    {
+        Scanner in = new Scanner(System.in);
+
+        System.out.println("What port?");
+        port = Integer.parseInt(in.nextLine());
+        System.out.println("--------------------");
+
+        int players = 0;
+
+        while (players < 1 || players > 2)
+        {
+            System.out.println("How many dead fellows today?");
+            players = Integer.parseInt(in.nextLine());;
+            System.out.println("--------------------");
+
+            if (players < 1 || players > 2)
+            {
+                System.out.println("Either one dead fellow or two dead fellows is enough for today...");
+            }
+        }
+        this.players = players;
     }
 
 
-    private boolean ConfigureServer()
+    public boolean checkIP(String deadFellowIP)
     {
-        System.out.println("Welcome to the CaveShooter server!");
-        System.out.println("----------------------------------");
-        System.out.println("Please, enter the port number:\n");
-
-        Scanner sc = new Scanner(System.in);
-        this.port = sc.nextInt();
-        System.out.println("----------------------------------");
-
-        System.out.println("Please, enter the number of poor fellows!:\n");
-        this.players = sc.nextInt();
-
-        if (this.players < 1 || this.players > 2)
+        String regex = "^(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(\\.(?!$)|$)){4}$";
+        if (deadFellowIP.matches(regex))
         {
-            System.out.println("The number of future dead men can't be less than 1 or more than 2!");
+            System.out.println("IP is valid");
+            System.out.println(deadFellowIP);
+            return true;
+        }
+        else
+        {
+            System.out.println("IP is not valid");
+            System.out.println(deadFellowIP);
+
             return false;
         }
-
-        return true;
     }
 }

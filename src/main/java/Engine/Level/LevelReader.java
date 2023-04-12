@@ -1,9 +1,8 @@
 package Engine.Level;
 
-import Engine.Entity.Entity;
-import Engine.Tile;
-import Engine.Tiles.Floor;
-import Engine.Tiles.Wall;
+import Engine.Entity.Tiles.Tile;
+import Engine.Entity.Tiles.Floor;
+import Engine.Entity.Tiles.Wall;
 import Logs.Logger;
 
 import java.io.*;
@@ -12,7 +11,7 @@ import java.util.List;
 
 public class LevelReader
 {
-    public LevelInfo readLevel(File file)
+    public static LevelInfo readLevel(File file)
     {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -33,11 +32,12 @@ public class LevelReader
      * What if the Level editor will make a list of Tiles from the user's input and serialize it to JSON,
      * so here we will only deserialize it
      */
-    private LevelInfo parseLevel(BufferedReader reader) throws IOException
+    private static LevelInfo parseLevel(BufferedReader reader) throws IOException
     {
+        String currentLine;
+        List<Tile> tiles = new ArrayList<>();
         int levelWidth = 0;
         int levelHeight = 0;
-        String currentLine;
         int rowNumber = 0;
 
         while ( (currentLine = reader.readLine()) != null)
@@ -46,6 +46,7 @@ public class LevelReader
             int posY = rowNumber * Tile.TILE_SIZE;
             int posX = 0;
 
+            levelWidth = 0;
             levelHeight += Tile.TILE_SIZE;
 
             for (String s : levelRow) {
@@ -58,9 +59,12 @@ public class LevelReader
                         tiles.add(new Wall(posX, posY));
                         break;
                 }
+
                 posX += Tile.TILE_SIZE;
+                levelWidth += Tile.TILE_SIZE;
             }
             rowNumber++;
         }
+        return new LevelInfo(tiles, levelHeight, levelWidth);
     }
 }

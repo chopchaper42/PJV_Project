@@ -1,7 +1,8 @@
 package Engine.Entity;
 
+import Engine.Graphics;
 import javafx.geometry.Point2D;
-import javafx.scene.canvas.GraphicsContext;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 
 public abstract class Entity
@@ -9,15 +10,13 @@ public abstract class Entity
     private Image image;
     private double x;
     private double y;
+    private Rectangle2D boundaries;
 
-    public Entity(Point2D position) {
-        this.x = position.getX();
-        this.y = position.getY();
-    }
-
-    public Entity(double x, double y) {
+    public Entity(Image image, double x, double y) {
+        this.image = image;
         this.x = x;
         this.y = y;
+        boundaries = new Rectangle2D(x, y, image.getWidth(), image.getHeight());
     }
 
     public double getX() {
@@ -45,8 +44,27 @@ public abstract class Entity
         this.y += y;
     }
 
-    public void draw(GraphicsContext graphics)
+    public void setX(double x)
     {
-        graphics.drawImage(image, getX(), getY());
+        this.x = x;
+    }
+
+    public void setY(double y)
+    {
+        this.y = y;
+    }
+
+    public void draw()
+    {
+        Graphics.getGraphics().drawImage(image, getX(), getY());
+    }
+
+    public Rectangle2D getBoundaries()
+    {
+        return boundaries;
+    }
+
+    void setBoundaries(double x, double y, double width, double height) {
+        boundaries = new Rectangle2D(x, y, width, height);
     }
 }

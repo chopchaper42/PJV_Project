@@ -1,3 +1,4 @@
+import Engine.Game;
 import Utility.Window;
 import javafx.application.Application;
 import javafx.scene.canvas.Canvas;
