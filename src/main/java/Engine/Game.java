@@ -1,13 +1,12 @@
-import Engine.Entity;
-import Engine.Level;
-import Engine.Player;
-import Engine.Tiles.Tile;
+package Engine;
+
+import Engine.Entity.Entity;
+import Engine.Level.Level;
+import Engine.Entity.Player;
+import Engine.Entity.Tiles.Tile;
 import javafx.animation.AnimationTimer;
-import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
@@ -18,12 +17,10 @@ import java.util.List;
 
 public class Game
 {
-    List<Entity> entities = new ArrayList<>();
-    Point2D defaultPosition;
-    private Canvas canvas;
-    private List<Tile> tiles;
-    private Player player;
-    private Stage stage;
+    private List<Entity> entities = new ArrayList<>();
+    private static Level level;
+    private static Player player;
+    private final Stage stage;
     private boolean W_pressed = false;
     private boolean A_pressed = false;
     private boolean S_pressed = false;
@@ -31,14 +28,10 @@ public class Game
 
 
     public Game(Stage stage) {
-        this.canvas = new Canvas();
-        tiles = new Level(
-                new File("./src/main/levels/level1.txt"),
-                canvas
-        ).getTiles();
-        defaultPosition = tiles.get(0).getPosition();
         this.stage = stage;
+        level = new Level(new File("./src/main/levels/level1.txt"));
     }
+
 
     public void run() {
         startGame();
@@ -50,48 +43,31 @@ public class Game
             public void handle(long now)
             {
                 double dt = (now - lastFrame) / 10e9;
-                player.move(W_pressed, A_pressed, S_pressed, D_pressed, dt);
-                redrawTiles();
-                redrawEntities();
+                //receiveData();
+                redraw();
+                player.handleInput(W_pressed, A_pressed, S_pressed, D_pressed, dt);
                 lastFrame = now;
+                //sendData();
             }
         };
         loop.start();
     }
 
-    // TODO: Move this to the player class ???
-    public void movePlayer(double dt) {
-
-    }
-    private void redrawTiles() {
-        tiles.forEach(tile -> {
-            getGraphicsContext().drawImage(tile.getImage(),
-                    tile.getX(),
-                    tile.getY());
-        });
-    }
-    private void redrawEntities() {
-        entities.forEach(entity ->
-        {
-            getGraphicsContext().drawImage(entity.getImage(),
-                    entity.getX(),
-                    entity.getY());
-        });
+    private void redraw() {
+        level.getTiles().forEach(Tile::draw);
+        entities.forEach(Entity::draw);
+        player.draw();
     }
 
     private void spawnPlayer()
     {
-        Player player = new Player(defaultPosition, 100);
+        Player player = new Player(level.getFirstFloorTile());
         entities.add(player);
-        this.player = player;
-    }
-
-    public GraphicsContext getGraphicsContext() {
-        return canvas.getGraphicsContext2D();
+        Game.player = player;
     }
 
     private void startGame() {
-        Group group = new Group(canvas);
+        Group group = new Group(Graphics.getCanvas());
         Scene scene = new Scene(group);
 
         scene.addEventHandler(KeyEvent.KEY_PRESSED, this::press);
@@ -119,4 +95,8 @@ public class Game
         }
     }
 
+    public static Level getLevel()
+    {
+        return level;
+    }
 }

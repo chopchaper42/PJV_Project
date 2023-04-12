@@ -1,3 +1,4 @@
+import Engine.Game;
 import Utility.Window;
 import javafx.application.Application;
 import javafx.scene.canvas.Canvas;
@@ -15,7 +16,12 @@ public class CaveShooter extends Application
     @Override
     public void start(Stage stage)
     {
-        Window.init(stage);
+        new Window(
+                "Cave Shooter",
+                1080,
+                720,
+                false
+        ).init(stage);
         new Game(stage).run();
     }
 }
