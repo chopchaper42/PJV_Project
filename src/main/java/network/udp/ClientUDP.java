@@ -11,13 +11,8 @@ import java.util.Scanner;
 public class ClientUDP
 {
     public static final int DEFAULT_PORT = 10421;
-    public static final int TARGET_PORT = 10422;
-    public static final String LOCAL_SERVER_IP = "127.0.0.1";
-    public static final String SERVER_IP = "172.21.7.2";
-    public static final String DANYA_SERVER_IP = "172.21.14.1";
-    public static final String EGOR_SERVER_IP = "172.20.10.4";
-    public static final String GRISHA_SERVER_IP = "172.26.112.1";
-    public static final String STAS_SERVER_IP = "172.21.13.2";
+
+    public static final String SERVER_IP = "172.20.10.4";
 
     public static void send() throws IOException
     {
@@ -33,42 +28,11 @@ public class ClientUDP
         DatagramPacket sendingPacket = new DatagramPacket(
                 sendingBuffer,
                 sendingBuffer.length,
-                InetAddress.getByName(STAS_SERVER_IP),
-                TARGET_PORT
+                InetAddress.getByName(SERVER_IP),
+                DEFAULT_PORT
         );
 
-        for (int i = 0; i < 100; i++) {
-            socket.send(sendingPacket);
-        }
 
-
-        /*Scanner sc = new Scanner(System.in);
-        DatagramSocket socket = new DatagramSocket(6001);
-        byte[] buff;
-        String msg = "";
-        while (!msg.equals("end")) {
-            msg = sc.next();
-            buff = msg.getBytes(StandardCharsets.UTF_8);
-
-            DatagramPacket packet = new DatagramPacket(
-                    buff,
-                    buff.length,
-                    InetAddress.getByName(EGOR_SERVER_IP_2),
-                    DEFAULT_PORT
-            );
-            System.out.println("Sending to: " + packet.getAddress() + ":" + packet.getPort());
-            for (int i = 0; i < 100; i++)
-                socket.send(packet);
-            try {
-                socket.setSoTimeout(5000);
-                socket.receive(packet);
-                String answer = new String(packet.getData(), 0, packet.getLength());
-                System.out.println(answer);
-            } catch (SocketTimeoutException e) {
-                System.out.println(e.getMessage());
-            }
-        }*/
+        socket.send(sendingPacket);
     }
-
-
 }
