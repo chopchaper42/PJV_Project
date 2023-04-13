@@ -9,6 +9,10 @@ public class Logger
 {
     private static final PrintStream outStream = System.err;
 
+    /**
+     * Logs the given text to the specified output
+     * @param text a text of the log
+     */
     public static void log(String text)
     {
             LocalDateTime now = LocalDateTime.now();

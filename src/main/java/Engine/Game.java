@@ -20,6 +20,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+
+/**
+ * Contains the game logic.
+ */
 public class Game
 {
     private List<Entity> entities = new ArrayList<>();
@@ -32,12 +36,18 @@ public class Game
     private boolean D_pressed = false;
 
 
+    /**
+     * Constructs a new Game object with a stage and a level
+     */
     public Game(Stage stage) {
         this.stage = stage;
         level = new Level(new File("./src/main/levels/level1.txt"));
     }
 
 
+    /**
+     * Runs the game
+     */
     public void run() {
         startGame();
         spawnPlayer();
@@ -57,6 +67,7 @@ public class Game
         };
         loop.start();
     }
+
     private void update(double dt) {
         List<Entity> toRemove = new ArrayList<>();
         level.getTiles().forEach(Tile::draw);
@@ -119,6 +130,11 @@ public class Game
         }
     }
 
+
+    /**
+     * Return the currently loaded level
+     * @return currently loaded level
+     */
     public static Level getLevel()
     {
         return level;

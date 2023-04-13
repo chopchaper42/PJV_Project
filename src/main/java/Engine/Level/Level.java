@@ -16,6 +16,10 @@ public final class Level
     private final GraphicsContext graphics = Graphics.getGraphics();
     private LevelInfo level = null;
 
+    /**
+     * Creates a new level
+     * @param file
+     */
     public Level(File file) {
         level = LevelReader.readLevel(file);
         Canvas canvas = graphics.getCanvas();
@@ -23,11 +27,18 @@ public final class Level
         canvas.setHeight(level.height());
     }
 
+    /**
+     * Returns the tiles that level contains
+     * @return tiles that level contains
+     */
     public List<Tile> getTiles()
     {
         return level.tiles();
     }
 
+    /**
+     * @return the {@code Point2D} position of the first top-left floor tile, or {@code null} if there is no tiles
+     */
     public Point2D getFirstFloorTile() {
         for (Entity tile : level.tiles()) {
             if (tile instanceof Floor)

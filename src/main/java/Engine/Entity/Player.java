@@ -11,22 +11,43 @@ import javafx.scene.image.Image;
 import java.io.File;
 import java.util.List;
 
+/**
+ * Represents a player
+ */
 public class Player extends LivingEntity
 {
     private final int SPEED_PER_SECOND = 1000;
     private List<Item> inventory;
     private final static Image image = new Image(new File("./src/main/assets/player.png").toURI().toString(), 30, 30, false, false);
 
+    /**
+     * Creates a player.
+     * @param x x coordinate
+     * @param y y coordinate
+     */
     public Player(double x, double y)
     {
-        super(image, x, y);
+        super(image, x, y, 100);
         setBoundaries(getX(), getY(), image.getWidth(), image.getHeight());
 
     }
+
+    /**
+     * Creates a player.
+     * @param point position {@code Point2D}
+     */
     public Player(Point2D point) {
         this(point.getX(), point.getY());
     }
 
+    /**
+     * handles the input
+     * @param W_pressed if W key is pressed
+     * @param A_pressed if A key is pressed
+     * @param S_pressed if S key is pressed
+     * @param D_pressed if D key is pressed
+     * @param dt elapsed time from the last frame
+     */
     public void handleInput(boolean W_pressed, boolean A_pressed, boolean S_pressed, boolean D_pressed, double dt) {
         double dx = 0;
         double dy = 0;
@@ -90,11 +111,17 @@ public class Player extends LivingEntity
 
     }
 
+    /**
+     * @return the player's speed per second
+     */
     public int getSpeedPerSecond()
     {
         return SPEED_PER_SECOND;
     }
 
+    /**
+     * @return the player's inventory
+     */
     public List<Item> getInventory()
     {
         return inventory;

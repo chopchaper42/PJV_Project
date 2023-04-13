@@ -9,6 +9,13 @@ public class Window
     private final boolean resizable;// = false;
     private final String title;// = "Cave Shooter";
 
+    /**
+     * Sets up a window
+     * @param title the title of the window
+     * @param width the width of the window
+     * @param height the height of the window
+     * @param resizable is resizable
+     */
     public Window(String title, double width, double height, boolean resizable) {
         this.title = title;
         this.width = width;
@@ -16,6 +23,10 @@ public class Window
         this.resizable = resizable;
     }
 
+    /**
+     * Initializes the window's stage
+     * @param stage stage
+     */
     public void init(Stage stage) {
         stage.setTitle(title);
         stage.setWidth(width);

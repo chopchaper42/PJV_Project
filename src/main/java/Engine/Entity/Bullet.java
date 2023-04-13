@@ -15,6 +15,11 @@ public class Bullet extends Entity
     private double deltaX;
     private double deltaY;
 
+    /**
+     * Creates a bullet
+     * @param source from where the bullet flies
+     * @param target to where the bullet flies
+     */
     public Bullet(Entity source, Point2D target)
     {
         super(image, source.getCenter().getX(), source.getCenter().getY());
@@ -30,6 +35,10 @@ public class Bullet extends Entity
         deltaY = SPEED * -sinA;
     }
 
+    /**
+     * Moves a bullet
+     * @param dt time elapsed since the last frame
+     */
     public void move(double dt) {
         moveX(deltaX * dt);
         moveY(deltaY * dt);
