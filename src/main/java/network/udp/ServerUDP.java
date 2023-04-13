@@ -56,6 +56,7 @@ public class ServerUDP
         System.out.println("The game is starting...");
 
 
+
     }
 
     private String extractIP(DatagramPacket receivePacket)
