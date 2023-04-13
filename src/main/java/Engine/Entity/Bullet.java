@@ -44,6 +44,4 @@ public class Bullet extends Entity
         moveY(deltaY * dt);
         setBoundaries(getX(), getY(), image.getWidth(), image.getHeight());
     }
-
-
 }

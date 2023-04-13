@@ -6,8 +6,8 @@ public class ClientMain
 {
     public static void main(String[] args) throws IOException
     {
-        //MyClient.main();
-        ClientUDP.send();
+        var clientUDP = new ClientUDP();
+        clientUDP.send();
         System.out.println("Done");
     }
 

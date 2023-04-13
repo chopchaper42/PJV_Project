@@ -10,11 +10,11 @@ import java.util.Scanner;
 
 public class ClientUDP
 {
-    public static final int DEFAULT_PORT = 10421;
+    public final int DEFAULT_PORT = 10421;
 
-    public static final String SERVER_IP = "";
+    public final String SERVER_IP = "";
 
-    public static void send() throws IOException
+    public void send() throws IOException
     {
         Scanner scr = new Scanner(System.in);
         DatagramSocket socket = new DatagramSocket(DEFAULT_PORT);
@@ -31,7 +31,6 @@ public class ClientUDP
                 InetAddress.getByName(SERVER_IP),
                 DEFAULT_PORT
         );
-
 
         socket.send(sendingPacket);
     }

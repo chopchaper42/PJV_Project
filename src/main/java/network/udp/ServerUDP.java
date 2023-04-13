@@ -7,8 +7,6 @@ import java.util.*;
 public class ServerUDP
 {
     private DatagramSocket socket;
-    private boolean running;
-
     private String[] ipList = new String[2];
     private final byte[] receiveBuffer = new byte[256];
     private final byte[] sendBuffer = new byte[256];
@@ -54,6 +52,7 @@ public class ServerUDP
         }
 
         System.out.println("The game is starting...");
+
 
 
     }
