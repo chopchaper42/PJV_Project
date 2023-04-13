@@ -31,7 +31,6 @@ public class Player extends LivingEntity
         double dx = 0;
         double dy = 0;
         double distance = getSpeedPerSecond() * dt;
-        Rectangle2D newBoundaries;
 
         if (W_pressed && !(D_pressed || A_pressed)) {
             dy = -distance;
@@ -78,10 +77,15 @@ public class Player extends LivingEntity
         }
 
 
-        newBoundaries = new Rectangle2D(getX() + dx, getY() + dy, image.getWidth(), image.getHeight());
-        if (!Collisions.checkCollision(Game.getLevel().getTiles(), newBoundaries)) {
+        Rectangle2D newBoundariesX = new Rectangle2D(getX() + dx, getY(), image.getWidth(), image.getHeight());
+        Rectangle2D newBoundariesY = new Rectangle2D(getX(), getY() + dy, image.getWidth(), image.getHeight());
+        if (!Collisions.checkCollision(Game.getLevel().getTiles(), newBoundariesX)) {
             moveX(dx);
+
+        }
+        if (!Collisions.checkCollision(Game.getLevel().getTiles(), newBoundariesY)) {
             moveY(dy);
+
         }
 
     }

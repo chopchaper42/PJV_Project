@@ -1,10 +1,12 @@
 package Engine.Entity;
 
+import Utility.Collisions;
 import Utility.Pythagoras;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 
 import java.io.File;
+import java.util.List;
 
 public class Bullet extends Entity
 {
@@ -17,8 +19,8 @@ public class Bullet extends Entity
     {
         super(image, source.getCenter().getX(), source.getCenter().getY());
 
-        double dX = source.getX() - target.getX();
-        double dY = source.getY() - target.getY();
+        double dX = source.getCenter().getX() - target.getX();
+        double dY = source.getCenter().getY() - target.getY();
         double diagonal = Pythagoras.diagonal(dX, dY);
 
         double cosA = dX / diagonal;
@@ -31,6 +33,7 @@ public class Bullet extends Entity
     public void move(double dt) {
         moveX(deltaX * dt);
         moveY(deltaY * dt);
+        setBoundaries(getX(), getY(), image.getWidth(), image.getHeight());
     }
 
 

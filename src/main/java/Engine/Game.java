@@ -63,11 +63,9 @@ public class Game
         entities.forEach(Entity::draw);
         entities.forEach(entity -> {
             if (entity instanceof Bullet) {
-                if (entity.getX() < 0 || entity.getX() > Graphics.getCanvas().getWidth() ||
-                    entity.getY() < 0 || entity.getY() > Graphics.getCanvas().getHeight() ||
-                        Collisions.checkCollision(entities, entity.getBoundaries())) {
-
+                if (Collisions.checkCollision(level.getTiles(), entity.getBoundaries())) {
                     toRemove.add(entity);
+                    System.out.println("wazzuuuuup");
                 }
                 ((Bullet) entity).move(dt);
             }

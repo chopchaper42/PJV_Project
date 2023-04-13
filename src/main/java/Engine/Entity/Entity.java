@@ -65,7 +65,7 @@ public abstract class Entity
     }
 
     void setBoundaries(double x, double y, double width, double height) {
-        boundaries = new Rectangle2D(x, y, width, height);
+        this.boundaries = new Rectangle2D(x, y, width, height);
     }
 
     public Point2D getCenter() {

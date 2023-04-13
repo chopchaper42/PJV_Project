@@ -15,10 +15,10 @@ public class Collisions
 
         for (T entity : entities) {
             if (!collides) {
-//                intersects = ((Entity) entity).getBoundaries().intersects(getBoundaries());
-                intersects = ((Entity) entity).getBoundaries().intersects(object);
+                intersects = object.intersects(((Entity) entity).getBoundaries());//.intersects(object);
                 isWall = entity instanceof Wall;
                 collides = intersects && isWall;
+
             }
 
         }
