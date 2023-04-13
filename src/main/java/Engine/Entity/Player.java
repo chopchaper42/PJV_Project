@@ -1,9 +1,8 @@
 package Engine.Entity;
 
-import Engine.Entity.Tiles.Wall;
 import Engine.Game;
 import Engine.Item;
-import Engine.Level.Level;
+import Utility.Collisions;
 import Utility.Pythagoras;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
@@ -16,7 +15,7 @@ public class Player extends LivingEntity
 {
     private final int SPEED_PER_SECOND = 1000;
     private List<Item> inventory;
-    private final static Image image = new Image(new File("./src/main/assets/player.png").toURI().toString());
+    private final static Image image = new Image(new File("./src/main/assets/player.png").toURI().toString(), 30, 30, false, false);
 
     public Player(double x, double y)
     {
@@ -26,11 +25,6 @@ public class Player extends LivingEntity
     }
     public Player(Point2D point) {
         this(point.getX(), point.getY());
-    }
-
-    private void moveDiagonal(double distance, int scaleX, int scaleY) {
-        moveX(distance * scaleX);
-        moveY(distance * scaleY);
     }
 
     public void handleInput(boolean W_pressed, boolean A_pressed, boolean S_pressed, boolean D_pressed, double dt) {
@@ -45,14 +39,14 @@ public class Player extends LivingEntity
         }
 
         if (W_pressed && D_pressed) {
-            dx = Pythagoras.leg(distance);
-            dy = -1 * Pythagoras.leg(distance);
+            dx = Pythagoras.leg45deg(distance);
+            dy = -1 * Pythagoras.leg45deg(distance);
 //                moveDiagonal(Pythagoras.leg(distance), 1, -1);
         }
 
         if (W_pressed && A_pressed) {
-            dx = -1 * Pythagoras.leg(distance);
-            dy = -1 * Pythagoras.leg(distance);
+            dx = -1 * Pythagoras.leg45deg(distance);
+            dy = -1 * Pythagoras.leg45deg(distance);
 //                moveDiagonal(Pythagoras.leg(distance), -1, -1);
         }
 
@@ -67,14 +61,14 @@ public class Player extends LivingEntity
         }
 
         if (S_pressed && A_pressed) {
-            dx = -1 * Pythagoras.leg(distance);
-            dy = Pythagoras.leg(distance);
+            dx = -1 * Pythagoras.leg45deg(distance);
+            dy = Pythagoras.leg45deg(distance);
 //                moveDiagonal(Pythagoras.leg(distance), -1, 1);
         }
 
         if (S_pressed && D_pressed) {
-            dx = Pythagoras.leg(distance);
-            dy = Pythagoras.leg(distance);
+            dx = Pythagoras.leg45deg(distance);
+            dy = Pythagoras.leg45deg(distance);
 //                moveDiagonal(Pythagoras.leg(distance), 1, 1);
         }
 
@@ -85,7 +79,7 @@ public class Player extends LivingEntity
 
 
         newBoundaries = new Rectangle2D(getX() + dx, getY() + dy, image.getWidth(), image.getHeight());
-        if (!checkCollision(Game.getLevel().getTiles(), newBoundaries)) {
+        if (!Collisions.checkCollision(Game.getLevel().getTiles(), newBoundaries)) {
             moveX(dx);
             moveY(dy);
         }
@@ -100,21 +94,5 @@ public class Player extends LivingEntity
     public List<Item> getInventory()
     {
         return inventory;
-    }
-    public <T> boolean checkCollision(List<T> entities, Rectangle2D newBoundaries) {
-        boolean intersects = false;
-        boolean isWall = false;
-        boolean collides = false;
-
-        for (T entity : entities) {
-            if (!collides) {
-//                intersects = ((Entity) entity).getBoundaries().intersects(getBoundaries());
-                intersects = ((Entity) entity).getBoundaries().intersects(newBoundaries);
-                isWall = entity instanceof Wall;
-                collides = intersects && isWall;
-            }
-
-        }
-        return collides;
     }
 }

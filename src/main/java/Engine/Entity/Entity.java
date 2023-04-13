@@ -67,4 +67,10 @@ public abstract class Entity
     void setBoundaries(double x, double y, double width, double height) {
         boundaries = new Rectangle2D(x, y, width, height);
     }
+
+    public Point2D getCenter() {
+        double x = getX() + (image.getWidth() / 2);
+        double y = getY() + (image.getHeight() / 2);
+        return new Point2D(x, y);
+    }
 }

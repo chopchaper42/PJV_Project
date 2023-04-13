@@ -23,10 +23,6 @@ public final class Level
         canvas.setHeight(level.height());
     }
 
-    public void render() {
-        level.tiles().forEach(this::renderTile);
-    }
-
     public List<Tile> getTiles()
     {
         return level.tiles();
@@ -38,9 +34,5 @@ public final class Level
                 return tile.getPosition();
         }
         return null;
-    }
-
-    private void renderTile(Entity tile) {
-        graphics.drawImage(tile.getImage(), tile.getX(), tile.getY());
     }
 }
