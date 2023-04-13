@@ -11,6 +11,11 @@ import java.util.List;
 
 public class LevelReader
 {
+    /**
+     * Reads a level from the specified file
+     * @param file file with level description
+     * @return {@code levelInfo} if the reading went good, otherwise {@code null}
+     */
     public static LevelInfo readLevel(File file)
     {
         try {
