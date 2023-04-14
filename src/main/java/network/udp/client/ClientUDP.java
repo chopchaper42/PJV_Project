@@ -8,6 +8,9 @@ import network.udp.IPManager;
 
 public class ClientUDP
 {
+    /**
+     * Runs the client
+     */
     public void run() throws SocketException, UnknownHostException
     {
         var ipManager = new IPManager();

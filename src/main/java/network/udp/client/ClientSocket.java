@@ -8,6 +8,11 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 public class ClientSocket extends Socket
 {
+    /**
+     * Constructor for ClientSocket
+     * @param serverIP IP address of the server
+     * @param ipManager IPManager object which is necessary for the socket
+     */
     public ClientSocket(String serverIP, IPManager ipManager) throws UnknownHostException, SocketException
     {
         super(ipManager);

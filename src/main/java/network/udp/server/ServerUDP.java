@@ -9,8 +9,14 @@ import network.udp.IPManager;
 
 public class ServerUDP
 {
+    /**
+     * The number of players in the game.
+     */
     private int players;
 
+    /**
+     * The packet that is received from the client.
+     */
     DatagramPacket receivePacket;
 //    DatagramPacket sendingPacket;
 
@@ -18,6 +24,9 @@ public class ServerUDP
     {
     }
 
+    /**
+     * start() method is the main method of the server.
+     */
     public void start() throws IOException
     {
         selectThePlayersNumber();

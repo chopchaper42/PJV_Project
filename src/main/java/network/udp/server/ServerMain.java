@@ -2,6 +2,9 @@ package network.udp.server;
 
 public class ServerMain
 {
+    /**
+     * The main method of the server.
+     */
     public static void main(String[] args)
     {
         ServerUDP server = null;
