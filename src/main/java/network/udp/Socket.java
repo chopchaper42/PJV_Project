@@ -1,32 +1,50 @@
 package network.udp;
 
 import java.net.*;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 public abstract class Socket
 {
     private DatagramSocket socket;
-    private final InetAddress localMachineIP = InetAddress.getLocalHost();
 
     private final int DEFAULT_PORT = 10421;
 
-    private String[] socketTarget = new String[2];
+    protected InetAddress[] socketTargets = new InetAddress[2];
 
-    private final byte[] receiveBuffer = new byte[256];
-    private final byte[] sendBuffer = new byte[256];
+    private byte[] receiveBuffer = new byte[256];
+    private byte[] sendBuffer = new byte[256];
 
-    public Socket() throws UnknownHostException, SocketException
+    public Socket(IPManager ipManager) throws UnknownHostException, SocketException
     {
-        socket = new DatagramSocket(DEFAULT_PORT, localMachineIP);
+        socket = new DatagramSocket(DEFAULT_PORT, ipManager.getMyIP());
     }
 
-    public addTarget(String ip)
+    public void send(String message)
     {
-        socketTarget[0] = ip;
-    }
+        sendBuffer = message.getBytes(StandardCharsets.UTF_8);
 
-    public void send()
-    {
+        for (InetAddress target : socketTargets)
+        {
+            if (target != null)
+            {
+                try
+                {
+                    DatagramPacket sendingPacket = new DatagramPacket(
+                            sendBuffer,
+                            sendBuffer.length,
+                            target,
+                            DEFAULT_PORT
+                    );
 
+                    socket.send(sendingPacket);
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     public DatagramPacket listen()
@@ -48,6 +66,6 @@ public abstract class Socket
 
     public int getPort()
     {
-        return port;
+        return DEFAULT_PORT;
     }
 }

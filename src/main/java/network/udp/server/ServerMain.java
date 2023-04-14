@@ -1,6 +1,4 @@
-package network.udp;
-
-import network.udp.ServerUDP;
+package network.udp.server;
 
 public class ServerMain
 {
