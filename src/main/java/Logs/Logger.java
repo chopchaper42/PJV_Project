@@ -7,7 +7,8 @@ import java.time.LocalDateTime;
 
 public class Logger
 {
-    private static final PrintStream outStream = System.err;
+    private static boolean enabled = false;
+    private static PrintStream stream = System.out;
 
     /**
      * Logs the given text to the specified output
@@ -15,7 +16,17 @@ public class Logger
      */
     public static void log(String text)
     {
+        if (enabled) {
             LocalDateTime now = LocalDateTime.now();
-            outStream.println(now + ": " + text + "\n");
+            stream.println(now + ": " + text);
+        }
+    }
+
+    public static void setEnabled(boolean enabled) {
+        Logger.enabled = enabled;
+        log("Logger enabled.");
+    }
+    public static void setOutput(PrintStream stream) {
+        Logger.stream = stream;
     }
 }

@@ -1,22 +1,26 @@
-package network.udp.server;
-
-public class ServerMain
-{
-    /**
-     * The main method of the server.
-     */
-    public static void main(String[] args)
-    {
-        ServerUDP server = null;
-        try
-        {
-            server = new ServerUDP();
-            server.start();
-
-        }
-        catch (Exception e)
-        {
-            System.out.println(e.getMessage());
-        }
-    }
-}
+//package network.udp.server;
+//
+//import java.net.InetAddress;
+//import java.net.NetworkInterface;
+//import java.util.Enumeration;
+//
+//public class ServerMain
+//{
+//    /**
+//     * The main method of the server.
+//     */
+//    public static void main(String[] args)
+//    {
+//        try
+//        {
+//            ServerPlayersConnection server = null;
+//            server = new ServerPlayersConnection();
+//            server.start();
+//
+//        }
+//        catch (Exception e)
+//        {
+//            System.out.println(e.getMessage());
+//        }
+//    }
+//}

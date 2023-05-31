@@ -1,24 +1,26 @@
 package Engine;
 
-import Engine.Entity.Bullet;
-import Engine.Entity.Entity;
 import Engine.Level.Level;
 import Engine.Entity.Player;
-import Engine.Entity.Tiles.Tile;
-import Utility.Collisions;
+import GUI.GUIManager;
+import Logs.Logger;
+import Utility.Window;
 import javafx.animation.AnimationTimer;
-import javafx.geometry.Point2D;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+import network.udp.client.ClientControllerSingleton;
+//import network.udp.client.ClientController;
+//import network.udp.client.ClientControllerSingleton;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 
 /**
@@ -26,22 +28,41 @@ import java.util.List;
  */
 public class Game
 {
-    private List<Entity> entities = new ArrayList<>();
-    private static Level level;
-    private static Player player;
+    private final Window window;
+    private final Level level;
+    private final String levelFile;
     private final Stage stage;
-    private boolean W_pressed = false;
-    private boolean A_pressed = false;
-    private boolean S_pressed = false;
-    private boolean D_pressed = false;
+    private final Player player;
+    private final InputManager inputManager;
+    private final UIManager uiManager;
+    private final GUIManager guiManager;
+    private final Updater updater;
+    private boolean running = true;
 
 
     /**
      * Constructs a new Game object with a stage and a level
      */
-    public Game(Stage stage) {
+    public Game(Window window, GUIManager guiManager, Stage stage, File level, Inventory inventory) {
+        this.window = window;
         this.stage = stage;
-        level = new Level(new File("./src/main/levels/level1.txt"));
+        this.level = new Level(window, level);
+        this.player = new Player(
+                this.window,
+                this.level.initialPlayerPosition().getX(),
+                this.level.initialPlayerPosition().getY(),
+                inventory
+        );
+        this.inputManager = new InputManager(this.player, this.level);
+        this.uiManager = new UIManager(
+                this.window,
+                this.player,
+                Color.YELLOWGREEN,
+                new Font("Verdana", 40)
+        );
+        this.guiManager = guiManager;
+        this.updater = new Updater(this.level, this.player, this.uiManager, this.guiManager);
+        this.levelFile = level.getName();
     }
 
 
@@ -50,7 +71,8 @@ public class Game
      */
     public void run() {
         startGame();
-        spawnPlayer();
+        Logger.log(player.getInventory().toString());
+
         AnimationTimer loop = new AnimationTimer()
         {
             long lastFrame;
@@ -58,86 +80,56 @@ public class Game
             public void handle(long now)
             {
                 double dt = (now - lastFrame) / 10e9;
-                //receiveData();
-                update(dt);
-                player.handleInput(W_pressed, A_pressed, S_pressed, D_pressed, dt);
+                updater.update(dt);
+                inputManager.handleInput(dt);
                 lastFrame = now;
-                //sendData();
+
+                if (!player.alive() || level.completed()) {
+                    this.stop();
+
+                    ClientControllerSingleton.getInstance().send("fellowIsDead", 0, 0);
+
+                    Logger.log("Game ended.");
+                }
+
+//                try {
+//                    Thread.sleep(10);
+//                } catch (InterruptedException e) {
+//                    throw new RuntimeException(e);
+//                }
             }
         };
+
+        Thread socketThread = new Thread(() -> {
+            ClientControllerSingleton.getInstance().run();
+        });
+
+        socketThread.start();
         loop.start();
     }
 
-
-    private void update(double dt) {
-        List<Entity> toRemove = new ArrayList<>();
-        level.getTiles().forEach(Tile::draw);
-        entities.forEach(Entity::draw);
-        entities.forEach(entity -> {
-            if (entity instanceof Bullet) {
-                if (Collisions.checkCollision(level.getTiles(), entity.getBoundaries())) {
-                    toRemove.add(entity);
-                    System.out.println("wazzuuuuup");
-                }
-                ((Bullet) entity).move(dt);
-            }
-        });
-        toRemove.forEach(entity -> entities.remove(entity));
-        player.draw();
-    }
-
-    private void spawnPlayer()
-    {
-        Player player = new Player(level.getFirstFloorTile());
-        entities.add(player);
-        Game.player = player;
-    }
-
     private void startGame() {
-        Group group = new Group(Graphics.getCanvas());
+        Group group = new Group(level.canvas(), player.canvas(), uiManager.canvas());
         Scene scene = new Scene(group);
 
-        scene.addEventHandler(KeyEvent.KEY_PRESSED, this::press);
-        scene.addEventHandler(KeyEvent.KEY_RELEASED, this::release);
-        scene.addEventHandler(MouseEvent.MOUSE_CLICKED, this::shoot);
+        addEventListeners(scene);
+
+        player.draw(player.getImage());
 
         stage.setScene(scene);
         stage.show();
     }
 
-    private void shoot(MouseEvent event)
+    private void addEventListeners(Scene scene) {
+        scene.addEventHandler(KeyEvent.KEY_PRESSED, inputManager::press);
+        scene.addEventHandler(KeyEvent.KEY_RELEASED, inputManager::release);
+        scene.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
+            player.shoot(event, level.bullets());
+        });
+    }
+
+    public String levelFile()
     {
-        System.out.println("click");
-        Point2D direction = new Point2D(event.getX(), event.getY());
-        Bullet bullet = new Bullet(player, direction);
-        entities.add(bullet);
-    }
-
-    private void release(KeyEvent event)
-    {
-        handle(event.getCode(), false);
-    }
-
-    private void press(KeyEvent event) {
-        handle(event.getCode(), true);
-    }
-
-    private void handle(KeyCode code, boolean pressed) {
-        switch (code) {
-            case W -> W_pressed = pressed;
-            case A -> A_pressed = pressed;
-            case S -> S_pressed = pressed;
-            case D -> D_pressed = pressed;
-        }
-    }
-
-
-    /**
-     * Return the currently loaded level
-     * @return currently loaded level
-     */
-    public static Level getLevel()
-    {
-        return level;
+        return levelFile;
     }
 }

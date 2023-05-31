@@ -6,7 +6,7 @@ public class ClientMain
 {
     public static void main(String[] args) throws IOException
     {
-        var clientUDP = new ClientUDP();
+        var clientUDP = new ClientConnection();
         clientUDP.run();
     }
 }

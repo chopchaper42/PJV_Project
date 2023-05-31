@@ -1,8 +1,10 @@
 package Engine.Entity;
 
-import Engine.Graphics;
+import Engine.SquareBoundaries;
+import Logs.Logger;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 
 /**
@@ -10,6 +12,8 @@ import javafx.scene.image.Image;
  */
 public abstract class Entity
 {
+
+
     private Image image;
     private double x;
     private double y;
@@ -35,6 +39,10 @@ public abstract class Entity
     public double getX() {
         return x;
     }
+    public void setX(double x) {
+        this.x = x;
+    }
+
     /**
      * Returns the y coordinate
      * @return y coordiante
@@ -42,6 +50,10 @@ public abstract class Entity
     public double getY() {
         return y;
     }
+    public void setY(double y) {
+        this.y = y;
+    }
+
     /**
      * Returns the entity's position
      * @return position
@@ -50,20 +62,12 @@ public abstract class Entity
         return new Point2D(x, y);
     }
 
-    void moveX(double x) {
-        this.x += x;
-    }
-
-    void moveY(double y) {
-        this.y += y;
-    }
-
     /**
      * Draws the entity on canvas
      */
-    public void draw()
+    public void draw(Canvas canvas)
     {
-        Graphics.getGraphics().drawImage(image, getX(), getY());
+        canvas.getGraphicsContext2D().drawImage(image, x, y);
     }
 
     /**
@@ -75,17 +79,41 @@ public abstract class Entity
         return boundaries;
     }
 
-    void setBoundaries(double x, double y, double width, double height) {
+    public void setBoundaries(double x, double y, double width, double height) {
         this.boundaries = new Rectangle2D(x, y, width, height);
+    }
+    public void setBoundaries(double x, double y, double size) {
+        this.boundaries = new SquareBoundaries(x, y, size);
+    }
+    public void setBoundaries(Rectangle2D bounds) {
+        this.boundaries = bounds;
     }
 
     /**
      * Returns the central point of an entity
      * @return the central point
      */
-    public Point2D getCenter() {
+    public Point2D center() {
         double x = getX() + (image.getWidth() / 2);
         double y = getY() + (image.getHeight() / 2);
         return new Point2D(x, y);
+    }
+
+    protected void setImage(Image image) {
+        this.image = image;
+    }
+    public Image getImage() {
+        return this.image;
+    }
+    public void logCoordinates() {
+        Logger.log("\n" + toString() + "\n\tX: " + getX() + "\n\tY:" + getY() + "\n\tbounds X: "
+                + boundaries.getMinX() + "\n\tbounds Y:" + boundaries.getMinY());
+    }
+
+    public double width() {
+        return boundaries.getWidth();
+    }
+    public double height() {
+        return boundaries.getHeight();
     }
 }
